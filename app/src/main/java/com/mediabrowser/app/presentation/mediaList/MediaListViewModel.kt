@@ -1,0 +1,99 @@
+package com.mediabrowser.app.presentation.mediaList
+
+import androidx.annotation.StringRes
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mediabrowser.app.domain.repository.MediaBrowserRepository
+import com.mediabrowser.app.presentation.mapper.toItem
+import com.mediabrowser.app.presentation.models.MediaItem
+import com.mediabrowser.app.shared.toAppError
+import com.mediabrowser.app.shared.toMessageRes
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import java.util.Locale
+
+data class MediaListUIState(
+    val allItems: List<MediaItem> = emptyList(),
+    val items: List<MediaItem> = emptyList(),
+    val isLoading: Boolean = false,
+    val isPullRefresh: Boolean = false,
+    @param:StringRes val errorMessageRes: Int? = null,
+    val searchVisible: Boolean = false,
+    val searchQuery: String = "",
+)
+
+class MediaListViewModel(
+    private val repository: MediaBrowserRepository
+) : ViewModel() {
+
+    companion object {
+        private const val DEF_LIMIT = 50
+    }
+
+    private val _state = MutableStateFlow(MediaListUIState(isLoading = true))
+    val state: StateFlow<MediaListUIState> = _state.asStateFlow()
+
+    init {
+        loadData()
+    }
+
+    fun loadData(isPullRefresh: Boolean = false) {
+        viewModelScope.launch {
+            _state.value = _state.value.copy(
+                isLoading = !isPullRefresh,
+                isPullRefresh = isPullRefresh,
+                errorMessageRes = null
+            )
+
+            runCatching {
+                repository.getMediaItems(DEF_LIMIT)
+            }.onSuccess { result ->
+                val allItems = result.map { it.toItem() }
+                _state.value = _state.value.copy(
+                    allItems = allItems,
+                    items = filterItems(
+                        query = _state.value.searchQuery,
+                        source = allItems
+                    ),
+                    isLoading = false,
+                    isPullRefresh = false,
+                    errorMessageRes = null
+                )
+            }.onFailure { throwable ->
+                _state.value = _state.value.copy(
+                    items = emptyList(),
+                    isLoading = false,
+                    isPullRefresh = false,
+                    errorMessageRes = throwable.toAppError().toMessageRes()
+                )
+            }
+        }
+    }
+
+    fun onSearchClicked() {
+        val visible = _state.value.searchVisible
+        _state.value = _state.value.copy(searchVisible = !visible)
+    }
+
+
+    fun onSearchQueryChanged(query: String) {
+        _state.value = _state.value.copy(
+            searchQuery = query,
+            items = filterItems(query, _state.value.allItems)
+        )
+    }
+
+    private fun filterItems(query: String, source: List<MediaItem>): List<MediaItem> {
+        val normalizedQuery = query.trim().lowercase(Locale.getDefault())
+
+        if (normalizedQuery.isBlank()) return source
+
+        return source.filter { item ->
+            item.title.lowercase(Locale.getDefault()).contains(normalizedQuery) ||
+                    item.description.lowercase(Locale.getDefault()).contains(normalizedQuery) ||
+                    item.releaseDate.lowercase(Locale.getDefault()).contains(normalizedQuery)
+        }
+    }
+}

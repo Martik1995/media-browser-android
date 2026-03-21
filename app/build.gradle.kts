@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.recyclerview)
     implementation(libs.coil)
+    implementation(libs.androidx.swipe.refresh.layout)
 
     // DI
     implementation(libs.koin.android)

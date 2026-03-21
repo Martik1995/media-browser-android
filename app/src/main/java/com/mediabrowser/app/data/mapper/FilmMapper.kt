@@ -7,5 +7,6 @@ fun FilmDto.toDomain(): Media = Media(
     id = id.orEmpty(),
     name = title.orEmpty(),
     description = description.orEmpty(),
+    releaseDate = releaseDate.orEmpty(),
     imageUrl = image.orEmpty()
 )

@@ -15,6 +15,7 @@ recyclerview = "1.4.0"
 retrofit = "3.0.0"
 retrofitSerialization = "1.0.0"
 serialization = "1.10.0"
+swipe_refresh_layout = "1.1.0"
 
 [libraries]
 # AndroidX
@@ -25,6 +26,7 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 # UI
 material = { module = "com.google.android.material:material", version.ref = "material" }
 recyclerview = { module = "androidx.recyclerview:recyclerview", version.ref = "recyclerview" }
+androidx-swipe-refresh-layout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swipe_refresh_layout" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 
 # DI

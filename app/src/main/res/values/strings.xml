@@ -1,4 +1,22 @@
 <resources>
     <string name="app_name">Media Browser</string>
-    <string name="api_key" translatable="false">3c8d116b</string>
+
+    <!--Error's-->
+    <string name="error_network">Please check your internet connection and try again</string>
+    <string name="error_server">Something went wrong on the server side</string>
+    <string name="error_serialization">Failed to load data</string>
+    <string name="error_unknown">Something went wrong</string>
+
+    <!--Root-->
+    <string name="retry">Retry</string>
+
+    <!--Media-->
+    <string name="empty_medias">No medias found</string>
+    <string name="search_hint">Search films</string>
+    <string name="director">Director</string>
+    <string name="producer">Producer</string>
+    <string name="release_year">Release year</string>
+    <string name="running_time">Running time</string>
+    <string name="score">Score</string>
+    <string name="minutes">%1$s min</string>
 </resources>

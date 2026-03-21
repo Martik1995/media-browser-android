@@ -1,7 +1,10 @@
 package com.mediabrowser.app.di
 
 import com.mediabrowser.app.data.api.MediaBrowserApi
+import com.mediabrowser.app.data.repository.MediaBrowserRepositoryImpl
+import com.mediabrowser.app.domain.repository.MediaBrowserRepository
 import com.mediabrowser.app.shared.createRetrofit
+import com.mediabrowser.app.BuildConfig
 import kotlinx.serialization.json.Json
 import org.koin.dsl.module
 import retrofit2.Retrofit
@@ -30,4 +33,8 @@ val DataModule = module {
         get<Retrofit>()
             .create(MediaBrowserApi::class.java)
     }
+
+
+    //Repositories
+    single<MediaBrowserRepository> { MediaBrowserRepositoryImpl(api = get()) }
 }
