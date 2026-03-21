@@ -42,9 +42,28 @@ android {
 }
 
 dependencies {
+    // AndroidX
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.appcompat)
+
+    // UI
     implementation(libs.material)
     implementation(libs.recyclerview)
+    implementation(libs.coil)
+
+    // DI
+    implementation(libs.koin.android)
+
+    // Coroutines
+    implementation(libs.coroutines.android)
+
+    // Networking
+    implementation(libs.okhttp.logging)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.serialization)
+    implementation(libs.serialization.json)
+
+    // Paging
+    implementation(libs.paging)
 }

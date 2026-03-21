@@ -1,4 +1,4 @@
-package com.mediabrowser.app
+package com.mediabrowser.app.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
