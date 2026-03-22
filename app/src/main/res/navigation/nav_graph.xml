@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mediaListFragment">
+
+    <fragment
+        android:id="@+id/mediaListFragment"
+        android:name="com.mediabrowser.app.presentation.mediaList.MediaListFragment"
+        android:label="@string/media_list">
+
+        <action
+            android:id="@+id/action_mediaListFragment_to_mediaDetailsFragment"
+            app:destination="@id/mediaDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/mediaDetailsFragment"
+        android:name="com.mediabrowser.app.presentation.mediaDetails.MediaDetailsFragment"
+        android:label="@string/media_details" />
+</navigation>

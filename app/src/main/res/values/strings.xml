@@ -12,11 +12,13 @@
 
     <!--Media-->
     <string name="empty_medias">No medias found</string>
-    <string name="search_hint">Search films</string>
+    <string name="search_hint">Search media</string>
     <string name="director">Director</string>
     <string name="producer">Producer</string>
     <string name="release_year">Release year</string>
     <string name="running_time">Running time</string>
     <string name="score">Score</string>
     <string name="minutes">%1$s min</string>
+    <string name="media_list">Media List</string>
+    <string name="media_details">Media Details</string>
 </resources>

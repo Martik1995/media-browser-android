@@ -20,6 +20,8 @@
     <dimen name="toolbar_action_size">48dp</dimen>
     <dimen name="toolbar_action_padding">12dp</dimen>
 
+    <dimen name="empty_result_icon_size">48dp</dimen>
+
     <dimen name="film_item_image_width">92dp</dimen>
     <dimen name="film_item_image_height">132dp</dimen>
     <dimen name="film_item_image_progress_size">18dp</dimen>

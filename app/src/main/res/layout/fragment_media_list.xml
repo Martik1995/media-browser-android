@@ -7,45 +7,31 @@
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_16"
+        android:layout_marginHorizontal="@dimen/spacing_16"
         android:layout_marginTop="@dimen/spacing_16"
-        android:layout_marginEnd="@dimen/spacing_16"
         android:text="@string/app_name"
-        android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
-        app:layout_constraintEnd_toStartOf="@id/btn_search"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_24"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Movies" />
 
-    <ImageButton
-        android:id="@+id/btn_search"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_8"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:contentDescription="@string/search_hint"
-        android:padding="@dimen/spacing_8"
-        android:src="@android:drawable/ic_menu_search"
-        app:layout_constraintBottom_toBottomOf="@id/tv_title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_title" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_search"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_16"
+        android:layout_marginHorizontal="@dimen/spacing_16"
         android:layout_marginTop="@dimen/spacing_16"
-        android:layout_marginEnd="@dimen/spacing_16"
         android:hint="@string/search_hint"
         android:visibility="gone"
-        app:endIconMode="clear_text"
+        app:endIconMode="custom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/tv_title">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_search"
@@ -59,46 +45,39 @@
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_refresh"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/zero"
+        android:layout_marginTop="@dimen/spacing_8"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title">
+        app:layout_constraintTop_toBottomOf="@id/til_search">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_items"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingStart="@dimen/spacing_16"
             android:paddingTop="@dimen/spacing_8"
-            android:paddingEnd="@dimen/spacing_16"
             android:paddingBottom="@dimen/spacing_16"
             tools:listitem="@layout/item_media" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <LinearLayout
-        android:id="@+id/layout_empty"
+
+    <TextView
+        android:id="@+id/tv_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
         android:padding="@dimen/spacing_24"
+        android:text="@string/empty_medias"
+        android:textSize="@dimen/text_size_16"
+        android:textStyle="normal"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title">
-
-        <TextView
-            android:id="@+id/tv_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/empty_medias"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            tools:text="Nothing found" />
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@id/til_search"
+        tools:text="Nothing found" />
 
     <LinearLayout
         android:id="@+id/layout_error"
@@ -111,12 +90,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title">
+        app:layout_constraintTop_toBottomOf="@id/til_search">
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:contentDescription="@null"
+            android:layout_width="@dimen/empty_result_icon_size"
+            android:layout_height="@dimen/empty_result_icon_size"
             android:src="@drawable/ic_error_outline" />
 
         <TextView
@@ -125,7 +103,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_12"
             android:gravity="center"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textSize="@dimen/text_size_16"
+            android:textStyle="normal"
             tools:text="Something went wrong" />
 
         <com.google.android.material.button.MaterialButton

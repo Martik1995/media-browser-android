@@ -12,17 +12,15 @@ import retrofit2.Retrofit
 private const val BASE_URL = "https://ghibliapi.vercel.app/"
 
 val DataModule = module {
-    single {
-        Json {
+
+    single<Retrofit> {
+        val json = Json {
             isLenient = true
             coerceInputValues = true
             ignoreUnknownKeys = true
         }
-    }
-
-    single {
         createRetrofit(
-            json = get(),
+            json = json,
             baseUrl = BASE_URL,
             enableLogging = BuildConfig.DEBUG
         )
@@ -36,5 +34,7 @@ val DataModule = module {
 
 
     //Repositories
-    single<MediaBrowserRepository> { MediaBrowserRepositoryImpl(api = get()) }
+    single<MediaBrowserRepository> {
+        MediaBrowserRepositoryImpl(api = get())
+    }
 }

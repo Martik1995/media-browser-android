@@ -8,6 +8,8 @@ import com.mediabrowser.app.presentation.mapper.toItem
 import com.mediabrowser.app.presentation.models.MediaItem
 import com.mediabrowser.app.shared.toAppError
 import com.mediabrowser.app.shared.toMessageRes
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -19,10 +21,13 @@ data class MediaListUIState(
     val items: List<MediaItem> = emptyList(),
     val isLoading: Boolean = false,
     val isPullRefresh: Boolean = false,
-    @param:StringRes val errorMessageRes: Int? = null,
-    val searchVisible: Boolean = false,
     val searchQuery: String = "",
-)
+    @param:StringRes val errorMessageRes: Int? = null,
+) {
+    val isLoadDataProcess get() = isLoading || isPullRefresh
+    val isError get() = !isLoadDataProcess && errorMessageRes != null
+    val isEmptyState get() = !isError && !isLoadDataProcess && items.isEmpty()
+}
 
 class MediaListViewModel(
     private val repository: MediaBrowserRepository
@@ -30,10 +35,13 @@ class MediaListViewModel(
 
     companion object {
         private const val DEF_LIMIT = 50
+        private const val SEARCH_DEBOUNCE_MS = 300L
     }
 
     private val _state = MutableStateFlow(MediaListUIState(isLoading = true))
     val state: StateFlow<MediaListUIState> = _state.asStateFlow()
+
+    private var searchJob: Job? = null
 
     init {
         loadData()
@@ -64,6 +72,7 @@ class MediaListViewModel(
             }.onFailure { throwable ->
                 _state.value = _state.value.copy(
                     items = emptyList(),
+                    allItems = emptyList(),
                     isLoading = false,
                     isPullRefresh = false,
                     errorMessageRes = throwable.toAppError().toMessageRes()
@@ -72,17 +81,15 @@ class MediaListViewModel(
         }
     }
 
-    fun onSearchClicked() {
-        val visible = _state.value.searchVisible
-        _state.value = _state.value.copy(searchVisible = !visible)
-    }
-
-
     fun onSearchQueryChanged(query: String) {
-        _state.value = _state.value.copy(
-            searchQuery = query,
-            items = filterItems(query, _state.value.allItems)
-        )
+        searchJob?.cancel(cause = null)
+        searchJob = viewModelScope.launch {
+            delay(SEARCH_DEBOUNCE_MS)
+            _state.value = _state.value.copy(
+                searchQuery = query,
+                items = filterItems(query, _state.value.allItems)
+            )
+        }
     }
 
     private fun filterItems(query: String, source: List<MediaItem>): List<MediaItem> {

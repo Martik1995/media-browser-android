@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.mediabrowser.app.databinding.FragmentMediaListBinding
 import com.mediabrowser.app.presentation.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,10 +29,11 @@ class MediaListFragment :
 
     private fun setupView() = with(binding) {
         rvItems.adapter = mediaListAdapter
-
-        btnSearch.setOnClickListener {
-            viewModel.onSearchClicked()
-        }
+        rvItems.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL,
+            false
+        )
 
         btnRetry.setOnClickListener {
             viewModel.loadData()
@@ -41,54 +43,62 @@ class MediaListFragment :
             viewModel.loadData(isPullRefresh = true)
         }
 
+        tilSearch.setEndIconOnClickListener {
+            handleEndIconClick()
+        }
+
         etSearch.doAfterTextChanged { editable ->
             viewModel.onSearchQueryChanged(editable?.toString().orEmpty())
         }
     }
 
+    private fun handleEndIconClick() = with(binding) {
+        val isRemoveQuery = viewModel.state.value.searchQuery.isNotEmpty()
+        if (isRemoveQuery) {
+            etSearch.setText("")
+        } else if (!etSearch.isFocused) {
+            etSearch.requestFocus()
+        }
+    }
+
     private fun handleState(state: MediaListUIState) {
+        handleItems(state)
+        handleErrorView(state)
+        handleSearchView(state)
         handleLoading(state.isLoading)
-        handleItems(state.items, state.isLoading, state.errorMessageRes)
-        handleErrorView(state.errorMessageRes)
         handlePullRefreshView(state.isPullRefresh)
-        handleSearchView(state.searchVisible)
     }
 
     private fun handleLoading(isLoading: Boolean) = with(binding) {
         progressBar.isVisible = isLoading
     }
 
-    private fun handleSearchView(searchVisible: Boolean) = with(binding) {
-        tilSearch.isVisible = searchVisible
+    private fun handleSearchView(state: MediaListUIState) = with(binding) {
+        val contentVisible = state.allItems.isNotEmpty()
 
-        val searchActionIcon =
-            if (searchVisible) android.R.drawable.ic_menu_close_clear_cancel
+        tilSearch.isVisible = contentVisible
+
+        val endIconRes =
+            if (state.searchQuery.isNotEmpty()) android.R.drawable.ic_menu_close_clear_cancel
             else android.R.drawable.ic_menu_search
 
-        btnSearch.setImageResource(searchActionIcon)
+        tilSearch.setEndIconDrawable(endIconRes)
     }
 
     private fun handleItems(
-        items: List<com.mediabrowser.app.presentation.models.MediaItem>,
-        isLoading: Boolean,
-        errorMessageRes: Int?
+        state: MediaListUIState,
     ) = with(binding) {
-        mediaListAdapter.submitList(items)
+        mediaListAdapter.submitList(state.items)
 
-        val showList = items.isNotEmpty()
-        val showEmpty = items.isEmpty() && !isLoading && errorMessageRes == null
-
-        rvItems.isVisible = showList
-        layoutEmpty.isVisible = showEmpty
+        rvItems.isVisible = !state.isEmptyState
+        tvEmpty.isVisible = state.isEmptyState
     }
 
-    private fun handleErrorView(errorMessageRes: Int?) = with(binding) {
-        val hasError = errorMessageRes != null
+    private fun handleErrorView(state: MediaListUIState) = with(binding) {
+        layoutError.isVisible = state.isError
 
-        layoutError.isVisible = hasError
-
-        if (hasError) {
-            tvError.text = getString(errorMessageRes)
+        if (state.isError && state.errorMessageRes != null) {
+            tvError.text = getString(state.errorMessageRes)
         }
     }
 
