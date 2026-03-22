@@ -2,6 +2,7 @@ package com.mediabrowser.app
 
 import android.app.Application
 import com.mediabrowser.app.di.DataModule
+import com.mediabrowser.app.di.DomainModule
 import com.mediabrowser.app.di.PresentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -21,6 +22,7 @@ class MediaBrowserApp : Application() {
             modules(
                 listOf(
                     PresentationModule,
+                    DomainModule,
                     DataModule,
                 )
             )

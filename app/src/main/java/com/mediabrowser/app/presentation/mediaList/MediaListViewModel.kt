@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mediabrowser.app.domain.repository.MediaBrowserRepository
+import com.mediabrowser.app.domain.useCase.GetMediaListUseCase
 import com.mediabrowser.app.presentation.mapper.toItem
 import com.mediabrowser.app.presentation.models.MediaItem
 import com.mediabrowser.app.shared.toAppError
@@ -30,11 +31,10 @@ data class MediaListUIState(
 }
 
 class MediaListViewModel(
-    private val repository: MediaBrowserRepository
+    private val getMediaListUseCase: GetMediaListUseCase
 ) : ViewModel() {
 
     companion object {
-        private const val DEF_LIMIT = 50
         private const val SEARCH_DEBOUNCE_MS = 300L
     }
 
@@ -56,7 +56,7 @@ class MediaListViewModel(
             )
 
             runCatching {
-                repository.getMediaItems(DEF_LIMIT)
+                getMediaListUseCase()
             }.onSuccess { result ->
                 val allItems = result.map { it.toItem() }
                 _state.value = _state.value.copy(

@@ -6,6 +6,10 @@ import com.mediabrowser.app.domain.entity.Media
 import com.mediabrowser.app.domain.entity.MediaDetail
 import com.mediabrowser.app.domain.repository.MediaBrowserRepository
 
+/**
+ * Data-layer implementation of [MediaBrowserRepository].
+ * Responsible for retrieving remote data and mapping it to domain models.
+ */
 class MediaBrowserRepositoryImpl(private val api: MediaBrowserApi) : MediaBrowserRepository {
     override suspend fun getMediaItems(limit: Int): List<Media> {
         return api.getFilms(limit)

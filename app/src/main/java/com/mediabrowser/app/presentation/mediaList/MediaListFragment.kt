@@ -2,18 +2,37 @@ package com.mediabrowser.app.presentation.mediaList
 
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mediabrowser.app.R
 import com.mediabrowser.app.databinding.FragmentMediaListBinding
 import com.mediabrowser.app.presentation.base.BaseFragment
+import com.mediabrowser.app.presentation.mediaDetails.MediaDetailsFragment
+import com.mediabrowser.app.presentation.models.MediaItem
+import com.mediabrowser.app.shared.clear
+import com.mediabrowser.app.shared.hideKeyboardAndClearFocus
+import com.mediabrowser.app.shared.showKeyboard
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MediaListFragment :
     BaseFragment<FragmentMediaListBinding>(FragmentMediaListBinding::inflate) {
 
     private val viewModel by viewModel<MediaListViewModel>()
-    private val mediaListAdapter by lazy { MediaListAdapter() }
+    private val mediaListAdapter by lazy { MediaListAdapter { openDetailFragment(it) } }
+
+    private fun openDetailFragment(it: MediaItem) {
+        val bundle = Bundle().apply {
+            putString(MediaDetailsFragment.DETAIL_ID, it.id)
+        }
+        findNavController().navigate(
+            R.id.mediaDetailsFragment,
+            bundle
+        )
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -47,6 +66,15 @@ class MediaListFragment :
             handleEndIconClick()
         }
 
+        etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboardAndClearFocus()
+                true
+            } else {
+                false
+            }
+        }
+
         etSearch.doAfterTextChanged { editable ->
             viewModel.onSearchQueryChanged(editable?.toString().orEmpty())
         }
@@ -55,9 +83,10 @@ class MediaListFragment :
     private fun handleEndIconClick() = with(binding) {
         val isRemoveQuery = viewModel.state.value.searchQuery.isNotEmpty()
         if (isRemoveQuery) {
-            etSearch.setText("")
-        } else if (!etSearch.isFocused) {
-            etSearch.requestFocus()
+            etSearch.clear()
+            hideKeyboardAndClearFocus()
+        } else {
+            showKeyboard(etSearch)
         }
     }
 
