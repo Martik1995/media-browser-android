@@ -26,14 +26,12 @@ val DataModule = module {
         )
     }
 
-    //API's
     single<MediaBrowserApi> {
         get<Retrofit>()
             .create(MediaBrowserApi::class.java)
     }
 
 
-    //Repositories
     single<MediaBrowserRepository> {
         MediaBrowserRepositoryImpl(api = get())
     }

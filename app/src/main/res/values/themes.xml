@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.MediaBrowser" parent="Theme.MaterialComponents.Light.NoActionBar" />
+
+    <style name="ToolbarTitleStyle" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_24</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 </resources>

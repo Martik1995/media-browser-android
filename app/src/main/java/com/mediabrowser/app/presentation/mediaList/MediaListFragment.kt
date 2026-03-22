@@ -3,7 +3,6 @@ package com.mediabrowser.app.presentation.mediaList
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.core.widget.doAfterTextChanged
 import androidx.navigation.fragment.findNavController
@@ -23,16 +22,6 @@ class MediaListFragment :
 
     private val viewModel by viewModel<MediaListViewModel>()
     private val mediaListAdapter by lazy { MediaListAdapter { openDetailFragment(it) } }
-
-    private fun openDetailFragment(it: MediaItem) {
-        val bundle = Bundle().apply {
-            putString(MediaDetailsFragment.DETAIL_ID, it.id)
-        }
-        findNavController().navigate(
-            R.id.mediaDetailsFragment,
-            bundle
-        )
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -58,7 +47,7 @@ class MediaListFragment :
             viewModel.loadData()
         }
 
-        swipeRefresh.setOnRefreshListener {
+        srLayout.setOnRefreshListener {
             viewModel.loadData(isPullRefresh = true)
         }
 
@@ -124,7 +113,7 @@ class MediaListFragment :
     }
 
     private fun handleErrorView(state: MediaListUIState) = with(binding) {
-        layoutError.isVisible = state.isError
+        llError.isVisible = state.isError
 
         if (state.isError && state.errorMessageRes != null) {
             tvError.text = getString(state.errorMessageRes)
@@ -132,6 +121,17 @@ class MediaListFragment :
     }
 
     private fun handlePullRefreshView(isRefreshing: Boolean) {
-        binding.swipeRefresh.isRefreshing = isRefreshing
+        binding.srLayout.isRefreshing = isRefreshing
+    }
+
+    private fun openDetailFragment(it: MediaItem) {
+        val bundle = Bundle().apply {
+            putString(MediaDetailsFragment.ARG_DETAIL_ID, it.id)
+        }
+
+        findNavController().navigate(
+            R.id.action_mediaListFragment_to_mediaDetailsFragment,
+            bundle
+        )
     }
 }

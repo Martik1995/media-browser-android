@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Media Browser</string>
 
-    <!--Error's-->
+    <!--Errors-->
     <string name="error_network">Please check your internet connection and try again</string>
     <string name="error_server">Something went wrong on the server side</string>
     <string name="error_serialization">Failed to load data</string>
@@ -11,7 +11,7 @@
     <string name="retry">Retry</string>
 
     <!--Media-->
-    <string name="empty_medias">No medias found</string>
+    <string name="empty_medias">No media found</string>
     <string name="search_hint">Search media</string>
     <string name="director">Director</string>
     <string name="producer">Producer</string>
@@ -21,4 +21,10 @@
     <string name="minutes">%1$s min</string>
     <string name="media_list">Media List</string>
     <string name="media_details">Media Details</string>
+    <string name="details">Media Details</string>
+    <string name="release_date_value">Release date: %1$s</string>
+    <string name="score_value">Score: %1$s</string>
+    <string name="producer_value">Producer: %1$s</string>
+    <string name="director_value">Director: %1$s</string>
+    <string name="running_time_value">Running time: %1$s</string>
 </resources>

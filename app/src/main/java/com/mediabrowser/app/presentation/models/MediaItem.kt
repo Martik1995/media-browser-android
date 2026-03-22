@@ -3,7 +3,7 @@ package com.mediabrowser.app.presentation.models
 import androidx.recyclerview.widget.DiffUtil
 
 data class MediaItem(
-    val id:String,
+    val id: String,
     val title: String,
     val description: String,
     val imageUrl: String,
@@ -15,14 +15,14 @@ data class MediaItem(
                 oldItem: MediaItem,
                 newItem: MediaItem
             ): Boolean {
-                return oldItem == newItem
+                return oldItem.id == newItem.id
             }
 
             override fun areContentsTheSame(
                 oldItem: MediaItem,
                 newItem: MediaItem
             ): Boolean {
-                return oldItem == newItem
+                return oldItem.id == newItem.id
             }
         }
     }

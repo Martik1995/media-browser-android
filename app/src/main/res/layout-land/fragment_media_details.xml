@@ -1,64 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    app:layout_collapseMode="parallax">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/ab_layout"
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/white">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        app:contentInsetStartWithNavigation="@dimen/zero"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/ic_back"
+        app:title="@string/details"
+        app:titleMarginStart="@dimen/spacing_16"
+        app:titleTextAppearance="@style/ToolbarTitleStyle"
+        app:titleTextColor="@color/black" />
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/ct_layout"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/details_collapsing_bar_height"
-            android:background="@android:color/white"
-            app:contentScrim="@android:color/white"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:titleEnabled="false">
+    <ImageView
+        android:id="@+id/iv_poster"
+        android:layout_width="@dimen/zero"
+        android:layout_height="@dimen/zero"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="1.5:2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        tools:ignore="ContentDescription"
+        tools:src="@tools:sample/backgrounds/scenic" />
 
-            <ImageView
-                android:id="@+id/iv_poster"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                app:layout_collapseMode="parallax"
-                tools:src="@tools:sample/backgrounds/scenic"
-                tools:ignore="ContentDescription" />
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:contentInsetStartWithNavigation="@dimen/zero"
-                app:layout_collapseMode="pin"
-                app:navigationIcon="@drawable/ic_back"
-                app:title="@string/details"
-                app:titleMarginStart="@dimen/spacing_16"
-                app:titleTextAppearance="@style/ToolbarTitleStyle"
-                app:titleTextColor="@color/black" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-
-    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
-        android:id="@+id/ns_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        android:layout_width="@dimen/zero"
+        android:layout_height="@dimen/zero"
+        android:layout_marginStart="@dimen/spacing_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_poster"
+        app:layout_constraintTop_toTopOf="@id/iv_poster">
+
 
         <LinearLayout
+            android:id="@+id/ll_media_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingHorizontal="@dimen/spacing_16"
-            android:paddingTop="@dimen/spacing_16"
-            android:paddingBottom="@dimen/spacing_24">
+            android:gravity="center_vertical"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_media_title"
@@ -70,19 +59,10 @@
                 tools:text="Castle in the Sky" />
 
             <TextView
-                android:id="@+id/tv_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_12"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_16"
-                tools:text="Description text..." />
-
-            <TextView
                 android:id="@+id/tv_release_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_16"
+                android:layout_marginTop="@dimen/spacing_12"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text_size_16"
                 tools:text="Release date: 1986" />
@@ -123,18 +103,30 @@
                 android:textSize="@dimen/text_size_16"
                 tools:text="Running time: 124 min" />
 
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text_size_18"
+                tools:text="Description text..." />
         </LinearLayout>
+
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/ll_error"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:gravity="center"
         android:orientation="vertical"
         android:padding="@dimen/spacing_24"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <ImageView
             android:layout_width="@dimen/empty_result_icon_size"
@@ -164,7 +156,14 @@
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+
+
