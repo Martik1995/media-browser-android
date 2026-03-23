@@ -3,12 +3,10 @@ package com.mediabrowser.app.presentation.mediaList
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mediabrowser.app.domain.repository.MediaBrowserRepository
 import com.mediabrowser.app.domain.useCase.GetMediaListUseCase
 import com.mediabrowser.app.presentation.mapper.toItem
 import com.mediabrowser.app.presentation.models.MediaItem
 import com.mediabrowser.app.shared.toAppError
-import com.mediabrowser.app.shared.toMessageRes
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -75,7 +73,7 @@ class MediaListViewModel(
                     allItems = emptyList(),
                     isLoading = false,
                     isPullRefresh = false,
-                    errorMessageRes = throwable.toAppError().toMessageRes()
+                    errorMessageRes = throwable.toAppError().messageRes
                 )
             }
         }

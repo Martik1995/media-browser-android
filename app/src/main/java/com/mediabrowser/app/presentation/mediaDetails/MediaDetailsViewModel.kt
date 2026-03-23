@@ -6,7 +6,6 @@ import com.mediabrowser.app.domain.useCase.GetMediaDetailsUseCase
 import com.mediabrowser.app.presentation.mapper.toItem
 import com.mediabrowser.app.presentation.models.MediaDetailsItem
 import com.mediabrowser.app.shared.toAppError
-import com.mediabrowser.app.shared.toMessageRes
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -60,7 +59,7 @@ class MediaDetailsViewModel(
                     isLoading = false,
                     isError = true,
                     item = null,
-                    errorMessageRes = throwable.toAppError().toMessageRes()
+                    errorMessageRes = throwable.toAppError().messageRes
                 )
             }
         }

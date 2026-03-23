@@ -70,9 +70,6 @@ dependencies {
     implementation(libs.retrofit.serialization)
     implementation(libs.serialization.json)
 
-    // Paging
-    implementation(libs.paging)
-
     //Navigation
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
